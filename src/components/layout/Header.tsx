@@ -1,5 +1,6 @@
-import { Globe, Wifi, WifiOff, Menu, Search, User, ChevronDown, Wheat, RefreshCw } from 'lucide-react';
+import { Globe, Wifi, WifiOff, Menu, Search, User, ChevronDown, Wheat, RefreshCw, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,9 +88,42 @@ export const Header = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-6 w-6" />
-          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+              <div className="flex flex-col gap-6 py-4">
+                <div className="flex items-center gap-2 border-b pb-4">
+                  <div className="bg-orange-500 rounded-full p-1.5 text-white">
+                    <Wheat className="h-5 w-5" />
+                  </div>
+                  <span className="font-bold text-[#1b325f]">AAPLA 7/12</span>
+                </div>
+                <nav className="flex flex-col gap-2">
+                  <Link to="/" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Home</Link>
+                  <Link to="/profile" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Digital 7/12</Link>
+                  <Link to="/crops" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Crop Advisory</Link>
+                  <Link to="/soil" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Soil Health Card</Link>
+                  <Link to="/disease" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Disease Detection</Link>
+                  <Link to="/irrigation" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Irrigation & Weather</Link>
+                  <Link to="/market" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Market Prices</Link>
+                  <Link to="/community" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg">Community</Link>
+                  <a href="https://mahadbt.maharashtra.gov.in/" target="_blank" className="px-4 py-2 hover:bg-orange-50 text-gray-700 font-medium rounded-lg flex items-center gap-2">
+                    Govt Schemes
+                  </a>
+                </nav>
+                <div className="mt-auto border-t pt-4">
+                  <div className="flex items-center gap-2 px-4 mb-2">
+                    <User className="h-5 w-5 text-gray-500" />
+                    <Link to="/auth" className="font-bold text-[#1b325f]">Login / Register</Link>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
 
