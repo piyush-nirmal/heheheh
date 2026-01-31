@@ -219,7 +219,7 @@ export const KisanAI = () => {
     if (!isOpen) {
         return (
             <Button
-                className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl bg-[#1b325f] hover:bg-orange-600 transition-all duration-300 z-50 flex items-center justify-center animate-bounce-slow"
+                className="fixed bottom-24 md:bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl bg-[#1b325f] hover:bg-orange-600 transition-all duration-300 z-50 flex items-center justify-center animate-bounce-slow"
                 onClick={() => setIsOpen(true)}
             >
                 <Bot className="h-8 w-8 text-white" />
@@ -228,7 +228,7 @@ export const KisanAI = () => {
     }
 
     return (
-        <Card className="fixed bottom-6 right-6 w-[90vw] md:w-[400px] h-[600px] shadow-2xl z-50 flex flex-col border-2 border-[#1b325f] animate-in slide-in-from-bottom-10 fade-in duration-300">
+        <Card className="fixed bottom-24 md:bottom-6 right-6 w-[90vw] md:w-[400px] h-[600px] shadow-2xl z-50 flex flex-col border-2 border-[#1b325f] animate-in slide-in-from-bottom-10 fade-in duration-300">
             {/* Header */}
             <CardHeader className="bg-[#1b325f] text-white p-4 flex flex-row items-center justify-between space-y-0 rounded-t-xl">
                 <div className="flex items-center gap-2">

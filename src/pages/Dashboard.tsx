@@ -77,7 +77,7 @@ const Dashboard = () => {
             <Card className="flex-1 shadow-md border-t-4 border-t-orange-500 overflow-hidden bg-white">
               <div className="p-4 flex flex-col items-center justify-center h-full text-center bg-gradient-to-b from-orange-50/50 to-white">
                 <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden mb-3">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Narendra_Modi_2021.jpg/220px-Narendra_Modi_2021.jpg" alt="PM Modi" className="w-full h-full object-cover shadow-sm" />
+                  <img src="/Narendra-Modi.jpeg" alt="PM Modi" className="w-full h-full object-cover shadow-sm" />
                 </div>
                 <h3 className="font-bold text-[#1b325f] text-lg">Shri Narendra Modi</h3>
                 <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mt-1">Hon'ble Prime Minister</p>
