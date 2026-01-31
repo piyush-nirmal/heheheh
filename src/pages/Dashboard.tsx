@@ -45,26 +45,26 @@ const Dashboard = () => {
           {/* Main Hero Slider (9 Cols) */}
           <div className="lg:col-span-9 relative rounded-xl overflow-hidden shadow-lg group h-[320px]">
             <img
-              src="https://images.unsplash.com/photo-1625246333195-bf79133bd53c?q=80&w=1200&auto=format&fit=crop"
-              alt="Banner"
+              src="https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=2000&auto=format&fit=crop"
+              alt="Digital Agriculture Banner"
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1b325f]/90 via-transparent to-transparent flex flex-col justify-end p-8 text-white">
+            <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/50 to-transparent flex flex-col justify-end p-8 text-gray-900">
               <div className="max-w-2xl transform transition-transform duration-500 group-hover:-translate-y-2">
-                <span className="bg-orange-500 text-xs font-bold px-3 py-1 rounded-sm mb-3 inline-block shadow-sm">
+                <span className="bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-sm mb-3 inline-block shadow-sm">
                   KEY INITIATIVE
                 </span>
-                <h2 className="text-3xl font-extrabold leading-tight mb-3 drop-shadow-md">
+                <h2 className="text-3xl font-extrabold leading-tight mb-3">
                   Digital Agriculture Mission 2024
                 </h2>
-                <p className="text-gray-100 text-lg line-clamp-2 drop-shadow-sm font-medium">
+                <p className="text-gray-800 text-lg line-clamp-2 font-medium">
                   Use advanced drone technology and AI-based advisory for precision farming. Empowering farmers with real-time data.
                 </p>
                 <div className="mt-4 flex gap-3">
-                  <Button className="bg-white text-[#1b325f] hover:bg-gray-100 font-bold border-none">
+                  <Button className="bg-[#1b325f] text-white hover:bg-[#15274a] font-bold border-none">
                     Read Guidelines
                   </Button>
-                  <Button variant="outline" className="text-white border-white hover:bg-white/10">
+                  <Button variant="outline" className="text-[#1b325f] border-[#1b325f] hover:bg-[#1b325f] hover:text-white">
                     Apply For Subsidy
                   </Button>
                 </div>
@@ -77,7 +77,7 @@ const Dashboard = () => {
             <Card className="flex-1 shadow-md border-t-4 border-t-orange-500 overflow-hidden bg-white">
               <div className="p-4 flex flex-col items-center justify-center h-full text-center bg-gradient-to-b from-orange-50/50 to-white">
                 <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden mb-3">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/P._M._Modi_Image.jpg.jpg" alt="PM Modi" className="w-full h-full object-cover" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Narendra_Modi_2021.jpg/220px-Narendra_Modi_2021.jpg" alt="PM Modi" className="w-full h-full object-cover shadow-sm" />
                 </div>
                 <h3 className="font-bold text-[#1b325f] text-lg">Shri Narendra Modi</h3>
                 <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mt-1">Hon'ble Prime Minister</p>
