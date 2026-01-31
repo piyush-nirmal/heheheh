@@ -17,6 +17,7 @@ import CommunityPage from "./pages/CommunityPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <InstallPrompt />
         <BrowserRouter>
           <MainLayout>
             <AppRoutes />
