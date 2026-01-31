@@ -14,6 +14,7 @@ import DiseaseDetectionPage from "./pages/DiseaseDetectionPage";
 import IrrigationPage from "./pages/IrrigationPage";
 import MarketPricesPage from "./pages/MarketPricesPage";
 import CommunityPage from "./pages/CommunityPage";
+import ContactPage from "./pages/ContactPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
@@ -56,6 +57,7 @@ const AppRoutes = () => {
       <Route path="/weather" element={<IrrigationPage />} />
       <Route path="/market" element={<MarketPricesPage />} />
       <Route path="/community" element={<CommunityPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
       <Route path="*" element={<NotFound />} />

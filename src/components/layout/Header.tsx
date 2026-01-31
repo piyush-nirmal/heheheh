@@ -162,7 +162,7 @@ export const Header = () => {
 
             <li><Link to="/map" className="block px-6 py-3 font-medium hover:bg-orange-600 transition-colors">Map View</Link></li>
 
-            <li><a href="#footer" className="block px-6 py-3 font-medium hover:bg-orange-600 transition-colors">Contact Us</a></li>
+            <li><Link to="/contact" className="block px-6 py-3 font-medium hover:bg-orange-600 transition-colors">Contact Us</Link></li>
 
             <li className="ml-auto flex items-center pr-2">
               <button className="p-2 hover:bg-orange-600 rounded-full">

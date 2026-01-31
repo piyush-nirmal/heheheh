@@ -110,7 +110,7 @@ const Dashboard = () => {
               title: "Soil Report",
               hi: "मिट्टी रिपोर्ट",
               desc: "Analyze your soil health",
-              icon: <FileText className="h-6 w-6 text-white" />,
+              icon: <img src="/soil-health-logo.png" alt="Soil" className="h-6 w-6" />,
               color: "bg-brown-600",
               link: "/soil"
             },

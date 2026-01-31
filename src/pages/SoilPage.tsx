@@ -59,14 +59,18 @@ const SoilPage = () => {
       <div className="bg-[#1b325f] text-white py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-2">
-                <FlaskConical className="h-8 w-8 text-green-400" />
-                Soil Health Analysis
-              </h1>
-              <p className="opacity-80 mt-1">
-                Enter your latest soil test results below for AI-powered advisory.
-              </p>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-full p-2 shadow-lg">
+                <img src="/soil-health-logo.png" alt="Soil Health Logo" className="w-full h-full object-contain" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold flex items-center gap-2">
+                  Soil Health Analysis
+                </h1>
+                <p className="opacity-80 mt-1">
+                  Enter your latest soil test results below for AI-powered advisory.
+                </p>
+              </div>
             </div>
             <Button variant="outline" className="hidden md:flex gap-2 text-white border-white/20 bg-white/10 hover:bg-white/20" onClick={() => setValues({ nitrogen: 100, phosphorus: 45, potassium: 60, ph: 6.5 })}>
               <RotateCcw className="h-4 w-4" /> Reset Defaults

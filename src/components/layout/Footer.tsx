@@ -28,7 +28,7 @@ export const Footer = () => {
                             <li><Link to="/map" className="hover:text-orange-500 transition-colors">Map View</Link></li>
                             <li><Link to="/crops" className="hover:text-orange-500 transition-colors">My Crops</Link></li>
                             <li><Link to="/soil" className="hover:text-orange-500 transition-colors">Soil Health Card</Link></li>
-                            <li><Link to="#" className="hover:text-orange-500 transition-colors">Kisan Call Center</Link></li>
+                            <li><Link to="/contact" className="hover:text-orange-500 transition-colors">Contact Us</Link></li>
                         </ul>
                     </div>
 
