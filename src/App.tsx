@@ -12,12 +12,25 @@ import CropsPage from "./pages/CropsPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
+import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { state } = useApp();
+
+  if (state.isLoadingAuth) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-2">
+          <Loader2 className="h-8 w-8 text-orange-600 animate-spin" />
+          <p className="text-sm text-gray-500 font-medium">Verifying Farmer ID...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!state.user) {
     return <Navigate to="/auth" replace />;
   }
@@ -29,10 +42,10 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/auth" element={<AuthPage />} />
 
-      <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/map" element={<ProtectedRoute><MapPage /></ProtectedRoute>} />
-      <Route path="/soil" element={<ProtectedRoute><SoilPage /></ProtectedRoute>} />
-      <Route path="/crops" element={<ProtectedRoute><CropsPage /></ProtectedRoute>} />
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/map" element={<MapPage />} />
+      <Route path="/soil" element={<SoilPage />} />
+      <Route path="/crops" element={<CropsPage />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
       <Route path="*" element={<NotFound />} />

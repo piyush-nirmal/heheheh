@@ -1,15 +1,30 @@
-import { MapPin, FlaskConical, Trash2, User, Settings, FileText, Download, ShieldCheck, ChevronRight, LogOut } from 'lucide-react';
+import { useState } from 'react';
+import { MapPin, FlaskConical, Trash2, User, ChevronRight, LogOut, FileText, Download, ShieldCheck, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 const ProfilePage = () => {
-  const { state, dispatch } = useApp();
+  const navigate = useNavigate();
+  const { state, dispatch, logout, addLandRecord, removeLandRecord } = useApp();
   const { toast } = useToast();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newRecord, setNewRecord] = useState({
+    district: '',
+    taluka: '',
+    village: '',
+    surveyNumber: '',
+    subdivision: '',
+    ownerName: '',
+    area: ''
+  });
 
   const handleRemoveLocation = (id: string) => {
     dispatch({ type: 'REMOVE_LOCATION', payload: id });
@@ -23,6 +38,33 @@ const ProfilePage = () => {
     if (confirm("Are you sure you want to clear all data? This cannot be undone.")) {
       localStorage.clear();
       window.location.reload();
+    }
+  };
+
+  const handleAddRecord = async () => {
+    if (!newRecord.district || !newRecord.taluka || !newRecord.village || !newRecord.surveyNumber) {
+      toast({ title: "Error", description: "Please fill in all required fields", variant: "destructive" });
+      return;
+    }
+
+    try {
+      await addLandRecord(newRecord);
+      toast({ title: "Success", description: "Land Record Linked Successfully" });
+      setIsDialogOpen(false);
+      setNewRecord({ district: '', taluka: '', village: '', surveyNumber: '', subdivision: '', ownerName: '', area: '' });
+    } catch (error) {
+      toast({
+        title: "Error Saving Record",
+        description: "Could not save to database. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteRecord = async (id: string) => {
+    if (confirm("Unlink this land record?")) {
+      await removeLandRecord(id);
+      toast({ title: "Removed", description: "Land record unlinked." });
     }
   };
 
@@ -41,12 +83,18 @@ const ProfilePage = () => {
         <div className="lg:col-span-1 space-y-6">
           <Card className="border-t-4 border-orange-500 shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-gray-200">
-                <User className="h-10 w-10 text-gray-500" />
+              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-gray-200 overflow-hidden">
+                {state.user?.photoURL ? (
+                  <img src={state.user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <User className="h-10 w-10 text-gray-500" />
+                )}
               </div>
-              <h2 className="text-xl font-bold text-gray-800">Guest Farmer</h2>
-              <p className="text-sm text-gray-500 mb-4">Maharashtra State</p>
-              <Badge variant="secondary" className="mb-4">Standard Account</Badge>
+              <h2 className="text-xl font-bold text-gray-800">{state.user?.displayName || 'Farmer'}</h2>
+              <p className="text-sm text-gray-500 mb-4">{state.user?.email || 'No email registered'}</p>
+              <Badge variant="secondary" className="mb-4">
+                {state.user?.emailVerified ? 'Verified Account' : 'Standard Account'}
+              </Badge>
               <Button className="w-full bg-[#1b325f] hover:bg-[#2c4a87]">
                 Edit Profile
               </Button>
@@ -72,9 +120,9 @@ const ProfilePage = () => {
                 </button>
               </li>
               <li>
-                <Link to="/auth" className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 flex justify-between items-center border-t border-gray-100 transition-colors">
+                <button onClick={async () => { await logout(); navigate('/auth'); }} className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 hover:text-red-700 flex justify-between items-center border-t border-gray-100 transition-colors">
                   Logout <span><LogOut className="h-4 w-4" /></span>
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -93,13 +141,88 @@ const ProfilePage = () => {
 
           {/* Digital 7/12 Section */}
           <Card className="border-gray-200 shadow-sm">
-            <CardHeader className="bg-gray-50 border-b border-gray-100 py-3">
+            <CardHeader className="bg-gray-50 border-b border-gray-100 py-3 flex flex-row items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2 text-[#1b325f]">
                 <FileText className="h-5 w-5" /> Digital 7/12 & 8A Records
               </CardTitle>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                    <Plus className="h-4 w-4 mr-1" /> Link New Record
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Link Land Record (7/12)</DialogTitle>
+                    <DialogDescription>
+                      Enter the details of your land record to link it to your profile.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>District *</Label>
+                        <Input value={newRecord.district} onChange={e => setNewRecord({ ...newRecord, district: e.target.value })} placeholder="e.g. Pune" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Taluka *</Label>
+                        <Input value={newRecord.taluka} onChange={e => setNewRecord({ ...newRecord, taluka: e.target.value })} placeholder="e.g. Haveli" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Village *</Label>
+                      <Input value={newRecord.village} onChange={e => setNewRecord({ ...newRecord, village: e.target.value })} placeholder="e.g. Nanded" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Survey / Gat No *</Label>
+                        <Input value={newRecord.surveyNumber} onChange={e => setNewRecord({ ...newRecord, surveyNumber: e.target.value })} placeholder="123" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Subdivision</Label>
+                        <Input value={newRecord.subdivision} onChange={e => setNewRecord({ ...newRecord, subdivision: e.target.value })} placeholder="2A" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Area (Hectare)</Label>
+                      <Input value={newRecord.area} onChange={e => setNewRecord({ ...newRecord, area: e.target.value })} placeholder="0.45" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Owner Name (Optional)</Label>
+                      <Input value={newRecord.ownerName} onChange={e => setNewRecord({ ...newRecord, ownerName: e.target.value })} placeholder="As per 7/12" />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={handleAddRecord} className="w-full bg-[#1b325f]">Link Record</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="p-6 space-y-4">
+              {/* Linked Records List */}
+              {state.landRecords.length > 0 && (
+                <div className="grid grid-cols-1 gap-3">
+                  {state.landRecords.map(record => (
+                    <div key={record.id} className="border border-green-200 bg-green-50/30 rounded-lg p-4 flex justify-between items-center group relative">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge variant="outline" className="bg-white border-green-300 text-green-700">Gat No. {record.surveyNumber}</Badge>
+                          <span className="text-sm font-semibold text-gray-700">{record.village}, {record.district}</span>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          {record.ownerName ? `Owner: ${record.ownerName}` : 'Owner not specified'} • {record.area ? `${record.area} Ha` : 'Area not specified'}
+                        </p>
+                      </div>
+                      <Button variant="ghost" size="icon" onClick={() => handleDeleteRecord(record.id)} className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 hover:bg-red-50 transition-all">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Existing Tools */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                 <div className="border border-gray-200 rounded-lg p-5 hover:border-orange-300 transition-colors cursor-pointer group">
                   <div className="flex items-start justify-between mb-2">
                     <div className="bg-orange-100 p-2 rounded-md group-hover:bg-orange-200 transition-colors">
@@ -111,7 +234,7 @@ const ProfilePage = () => {
                   <p className="text-xs text-gray-500">Get your digitally signed land record rights document.</p>
                 </div>
 
-                <div className="border border-gray-200 rounded-lg p-5 hover:border-blue-300 transition-colors cursor-pointer group">
+                <a href="https://old.eci.gov.in/files/file/4826-form-8-application-form-for-shifting-of-residencecorrection-of-entries-in-existing-electoral%C2%A0rollreplacement-of-epicmarking-of-pwd/" target="_blank" rel="noopener noreferrer" className="border border-gray-200 rounded-lg p-5 hover:border-blue-300 transition-colors cursor-pointer group block">
                   <div className="flex items-start justify-between mb-2">
                     <div className="bg-blue-100 p-2 rounded-md group-hover:bg-blue-200 transition-colors">
                       <ShieldCheck className="h-6 w-6 text-blue-600" />
@@ -119,7 +242,7 @@ const ProfilePage = () => {
                   </div>
                   <h3 className="font-bold text-gray-800 mb-1">View Form 8A</h3>
                   <p className="text-xs text-gray-500">Check your holding details and land taxation status.</p>
-                </div>
+                </a>
               </div>
             </CardContent>
           </Card>

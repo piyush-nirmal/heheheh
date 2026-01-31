@@ -140,35 +140,33 @@ export const KisanAI = () => {
     };
 
     const fetchAIResponse = async (query: string): Promise<string | null> => {
-        const apiKey = import.meta.env.VITE_AIML_API_KEY;
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY; // Updated to Gemini Key
         if (!apiKey) return null;
 
         try {
-            const response = await fetch('https://api.aimlapi.com/chat/completions', {
+            // Using Google Gemini API
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${apiKey}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        {
-                            role: "system",
-                            content: `You are Kisan AI, an expert agricultural advisor for Indian farmers. 
-              Provide precise scientific advice on fertilizer management (dosages in kg/acre), crop cycles (Rabi/Kharif), and pest control (chemical and organic).
-              Keep answers short, practical, and easy to understand.
-              Reply in the same language as the user's question or the selected language (${currentLang.name}).`
-                        },
-                        { role: "user", content: query }
-                    ],
-                    max_tokens: 150
+                    contents: [{
+                        parts: [{
+                            text: `You are Kisan AI, an expert agricultural advisor for Indian farmers. 
+                            Provide precise scientific advice on fertilizer management (dosages in kg/acre), crop cycles (Rabi/Kharif), and pest control (chemical and organic).
+                            Keep answers short, practical, and easy to understand.
+                            Reply in the same language as the user's question or the selected language (${currentLang.name}).
+                            
+                            User Query: ${query}`
+                        }]
+                    }]
                 })
             });
 
             const data = await response.json();
-            if (data.choices && data.choices[0]) {
-                return data.choices[0].message.content;
+            if (data.candidates && data.candidates[0]?.content?.parts[0]) {
+                return data.candidates[0].content.parts[0].text;
             }
             return null;
         } catch (e) {
@@ -243,8 +241,8 @@ export const KisanAI = () => {
                         <span className="text-[10px] opacity-80 font-medium tracking-wide flex items-center gap-1">
                             {isOffline ? (
                                 <><WifiOff className="h-3 w-3" /> OFFLINE MODE</>
-                            ) : import.meta.env.VITE_AIML_API_KEY ? (
-                                <span className="text-green-400 font-bold animate-pulse">AI POWERED • ONLINE</span>
+                            ) : import.meta.env.VITE_GEMINI_API_KEY ? (
+                                <span className="text-green-400 font-bold animate-pulse">GEMINI AI • ONLINE</span>
                             ) : (
                                 'LOCAL MODE'
                             )}

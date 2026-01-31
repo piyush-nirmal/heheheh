@@ -35,22 +35,22 @@ const MapClickHandler = ({ onLocationSelect }: { onLocationSelect: (lat: number,
 // Component to fly to a location
 const FlyToLocation = ({ position }: { position: LatLng | null }) => {
   const map = useMap();
-  
+
   useEffect(() => {
     if (position) {
       map.flyTo(position, 15, { duration: 1.5 });
     }
   }, [position, map]);
-  
+
   return null;
 };
 
 const MapPage = () => {
   const { state, addLocation, dispatch } = useApp();
   const { toast } = useToast();
-  
+
   const [selectedPosition, setSelectedPosition] = useState<LatLng | null>(
-    state.currentLocation 
+    state.currentLocation
       ? new LatLng(state.currentLocation.coordinates.lat, state.currentLocation.coordinates.lng)
       : null
   );
@@ -66,11 +66,11 @@ const MapPage = () => {
   const handleLocationSelect = (lat: number, lng: number) => {
     const position = new LatLng(lat, lng);
     setSelectedPosition(position);
-    
+
     // Simulate syncing
     setIsSyncing(true);
     dispatch({ type: 'SET_SYNCING', payload: true });
-    
+
     setTimeout(() => {
       setIsSyncing(false);
       dispatch({ type: 'SET_SYNCING', payload: false });
@@ -111,11 +111,20 @@ const MapPage = () => {
   };
 
   const handleSaveLocation = () => {
+    if (!state.user) {
+      toast({
+        title: 'Authentication Required',
+        description: 'Please login to save your farm location.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (!selectedPosition) return;
-    
+
     const name = locationName.trim() || `Farm ${state.locations.length + 1}`;
     addLocation(name, selectedPosition.lat, selectedPosition.lng);
-    
+
     toast({
       title: 'Location Saved!',
       description: `${name} has been added to your farms.`,
@@ -158,7 +167,7 @@ const MapPage = () => {
             attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
-          
+
           {/* Labels overlay */}
           <TileLayer
             attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
@@ -167,7 +176,7 @@ const MapPage = () => {
 
           <MapClickHandler onLocationSelect={handleLocationSelect} />
           <FlyToLocation position={selectedPosition} />
-          
+
           {selectedPosition && (
             <Marker position={selectedPosition} icon={customIcon} />
           )}
@@ -210,15 +219,15 @@ const MapPage = () => {
                   {selectedPosition.lat.toFixed(6)}, {selectedPosition.lng.toFixed(6)}
                 </span>
               </div>
-              
+
               <Input
                 placeholder="Enter farm name (e.g., Main Field)"
                 value={locationName}
                 onChange={(e) => setLocationName(e.target.value)}
               />
-              
-              <Button 
-                className="w-full" 
+
+              <Button
+                className="w-full"
                 onClick={handleSaveLocation}
                 disabled={isSyncing}
               >
