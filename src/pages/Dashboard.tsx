@@ -85,8 +85,8 @@ const Dashboard = () => {
             </Card>
             <Card className="flex-1 shadow-md border-t-4 border-t-[#1b325f] overflow-hidden bg-white">
               <div className="p-4 flex flex-col items-center justify-center h-full text-center bg-gradient-to-b from-blue-50/50 to-white">
-                <div className="w-16 h-16 rounded-full border-4 border-white shadow-md overflow-hidden mb-2 bg-gray-200 flex items-center justify-center text-2xl">
-                  🏛️
+                <div className="w-16 h-16 rounded-full border-4 border-white shadow-md overflow-hidden mb-2">
+                  <img src="/1357404-shivraj.avif" alt="Agriculture Minister" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="font-bold text-[#1b325f] text-base">Shri Shivraj Singh Chouhan</h3>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-1">Hon'ble Agriculture Minister</p>
