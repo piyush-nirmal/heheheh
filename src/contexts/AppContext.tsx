@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import i18n from '@/i18n/index';
 import { SoilData, LocationData } from '@/services/recommendationEngine';
 import { auth } from '@/config/firebase';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
@@ -28,6 +29,7 @@ export interface AppState {
   user: User | null;
   isLoadingAuth: boolean;
   language: 'en' | 'hi' | 'mr';
+  fontSize: 'small' | 'medium' | 'large';
   isOnline: boolean;
 
   // Farm data
@@ -52,6 +54,7 @@ type AppAction =
   | { type: 'SET_AUTH_LOADING'; payload: boolean }
   | { type: 'LOGOUT' }
   | { type: 'SET_LANGUAGE'; payload: 'en' | 'hi' | 'mr' }
+  | { type: 'SET_FONT_SIZE'; payload: 'small' | 'medium' | 'large' }
   | { type: 'SET_ONLINE_STATUS'; payload: boolean }
   | { type: 'ADD_LOCATION'; payload: FarmLocation }
   | { type: 'SET_LOCATIONS'; payload: FarmLocation[] }
@@ -72,6 +75,7 @@ const initialState: AppState = {
   user: null,
   isLoadingAuth: true,
   language: 'en',
+  fontSize: 'medium',
   isOnline: navigator.onLine,
   locations: [],
   currentLocation: null,
@@ -104,6 +108,9 @@ const appReducer = (state: AppState, action: AppAction): AppState => {
 
     case 'SET_LANGUAGE':
       return { ...state, language: action.payload };
+
+    case 'SET_FONT_SIZE':
+      return { ...state, fontSize: action.payload };
 
     case 'SET_ONLINE_STATUS':
       return { ...state, isOnline: action.payload };
@@ -179,6 +186,7 @@ interface AppContextType {
   addLandRecord: (record: Omit<LandRecord, 'id' | 'createdAt' | 'userId'>) => Promise<void>;
   removeLandRecord: (id: string) => Promise<void>;
   setLanguage: (lang: 'en' | 'hi' | 'mr') => void;
+  setFontSize: (size: 'small' | 'medium' | 'large') => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -216,24 +224,33 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return () => unsubscribe();
   }, []);
 
-  // Load language prefs
+  // Load language & font size prefs
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.language) dispatch({ type: 'SET_LANGUAGE', payload: parsed.language });
+        if (parsed.fontSize) dispatch({ type: 'SET_FONT_SIZE', payload: parsed.fontSize });
       }
     } catch (error) {
       console.error('Error loading prefs:', error);
     }
   }, []);
 
-  // Save language prefs
+  // Save prefs & apply to document
   useEffect(() => {
-    const toSave = { language: state.language };
+    const toSave = { language: state.language, fontSize: state.fontSize };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
-  }, [state.language]);
+
+    // Apply language to document & i18next
+    document.documentElement.lang = state.language;
+    i18n.changeLanguage(state.language);
+
+    // Apply font size to document root
+    const sizeMap = { small: '14px', medium: '16px', large: '18px' };
+    document.documentElement.style.fontSize = sizeMap[state.fontSize];
+  }, [state.language, state.fontSize]);
 
   // Online/offline detection
   useEffect(() => {
@@ -323,8 +340,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     dispatch({ type: 'SET_LANGUAGE', payload: lang });
   };
 
+  const setFontSize = (size: 'small' | 'medium' | 'large') => {
+    dispatch({ type: 'SET_FONT_SIZE', payload: size });
+  };
+
   return (
-    <AppContext.Provider value={{ state, dispatch, login, logout, addLocation, removeLocation, saveSoilReading, addLandRecord, removeLandRecord, setLanguage }}>
+    <AppContext.Provider value={{ state, dispatch, login, logout, addLocation, removeLocation, saveSoilReading, addLandRecord, removeLandRecord, setLanguage, setFontSize }}>
       {children}
     </AppContext.Provider>
   );

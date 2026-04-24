@@ -57,7 +57,7 @@ const ContactPage = () => {
         <div className="bg-gray-50 min-h-screen">
             {/* Header Section */}
             <div className="bg-gradient-to-r from-[#1b325f] to-[#2a4a7f] text-white py-12">
-                <div className="max-w-7xl mx-auto px-4">
+                <div className="max-w-screen-2xl mx-auto px-4">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold mb-3">Contact Us</h1>
                         <p className="text-blue-100 text-lg max-w-2xl mx-auto">
@@ -67,7 +67,7 @@ const ContactPage = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-12">
+            <div className="max-w-screen-2xl mx-auto px-4 py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column - Contact Information */}
                     <div className="lg:col-span-1 space-y-6">

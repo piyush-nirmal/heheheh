@@ -43,6 +43,7 @@ import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { getRealWeatherData } from '@/services/weatherService';
 import { CurrentWeather } from '@/data/mockWeatherData';
+import { useTranslation } from 'react-i18next';
 
 const waterRequirementConfig = {
   low: { color: 'text-sky-400', label: 'Low water' },
@@ -288,6 +289,7 @@ const CropDetailDialog = ({
 
 const CropsPage = () => {
   const { state } = useApp();
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<CropData['category'] | 'all'>('all');
   const [selectedCrop, setSelectedCrop] = useState<CropRecommendation | null>(null);
@@ -344,15 +346,15 @@ const CropsPage = () => {
   return (
     <div className="bg-gray-50 min-h-screen pb-12">
       <div className="bg-[#1b325f] text-white py-6 mb-6">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-2xl font-bold">Crop Advisory System</h1>
+        <div className="max-w-screen-2xl mx-auto px-4">
+          <h1 className="text-2xl font-bold">{t('crops.title')}</h1>
           <p className="opacity-80 text-sm mt-1">
-            AI-based recommendations optimized for your soil parameters and local climate.
+            {t('crops.subtitle')}
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-screen-2xl mx-auto px-4">
         {state.currentSoilData ? (
           <div className="bg-green-50 border border-green-200 rounded-md p-3 mb-6 flex items-center gap-2 text-sm text-green-800">
             <CheckCircle2 className="h-4 w-4" />
@@ -370,7 +372,7 @@ const CropsPage = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search crops..."
+              placeholder={t('crops.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -407,7 +409,7 @@ const CropsPage = () => {
 
         {/* Results count */}
         <p className="text-sm text-muted-foreground mb-3">
-          Showing {filteredRecommendations.length} crops
+          {t('crops.showing')} {filteredRecommendations.length} {t('crops.cropsLabel')}
         </p>
 
         {/* Crop grid */}
@@ -424,7 +426,7 @@ const CropsPage = () => {
         {filteredRecommendations.length === 0 && (
           <Card className="border-dashed">
             <CardContent className="p-8 text-center text-muted-foreground">
-              <p>No crops match your search criteria.</p>
+              <p>{t('crops.noResults')}</p>
             </CardContent>
           </Card>
         )}

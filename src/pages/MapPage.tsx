@@ -214,7 +214,7 @@ const MapPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-emerald-50 pb-8">
       {/* Header */}
       <div className="bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-screen-2xl mx-auto p-6">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-2">
             Farm Location Intelligence
           </h1>
@@ -224,7 +224,7 @@ const MapPage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
+      <div className="max-w-screen-2xl mx-auto p-6 space-y-6">
         {/* Search bar */}
         <Card>
           <CardContent className="p-4">

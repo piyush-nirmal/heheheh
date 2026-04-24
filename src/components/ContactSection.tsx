@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 export const ContactSection = () => {
     return (
         <div className="bg-gradient-to-br from-[#1b325f] to-[#2a4a7f] text-white py-12">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-screen-2xl mx-auto px-4">
                 <div className="text-center mb-8">
                     <h2 className="text-3xl font-bold mb-2">Need Help?</h2>
                     <p className="text-blue-100">We're here to assist you 24/7</p>

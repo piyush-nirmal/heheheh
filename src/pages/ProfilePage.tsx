@@ -72,13 +72,13 @@ const ProfilePage = () => {
     <div className="bg-gray-50 min-h-screen pb-12">
       {/* Page Title Section */}
       <div className="bg-[#1b325f] text-white py-8">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-screen-2xl mx-auto px-4">
           <h1 className="text-3xl font-bold mb-2">My Farmer Profile</h1>
           <p className="opacity-80">Manage your Digital 7/12 Records, Soil Health Cards, and Personal Preferences.</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-screen-2xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Left Sidebar - Profile & Quick Actions */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="border-t-4 border-orange-500 shadow-md">

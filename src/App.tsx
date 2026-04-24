@@ -43,28 +43,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   return children;
 };
 
-const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/auth" element={<AuthPage />} />
-
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/map" element={<MapPage />} />
-      <Route path="/soil" element={<SoilPage />} />
-      <Route path="/crops" element={<CropsPage />} />
-      <Route path="/disease" element={<DiseaseDetectionPage />} />
-      <Route path="/irrigation" element={<IrrigationPage />} />
-      <Route path="/weather" element={<IrrigationPage />} />
-      <Route path="/market" element={<MarketPricesPage />} />
-      <Route path="/community" element={<CommunityPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-};
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AppProvider>
@@ -73,9 +51,33 @@ const App = () => (
         <Sonner />
         <InstallPrompt />
         <BrowserRouter>
-          <MainLayout>
-            <AppRoutes />
-          </MainLayout>
+          <Routes>
+            {/* ── Standalone page — no header/footer ── */}
+            <Route path="/auth" element={<AuthPage />} />
+
+            {/* ── All other routes share MainLayout ── */}
+            <Route
+              path="/*"
+              element={
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/map" element={<MapPage />} />
+                    <Route path="/soil" element={<SoilPage />} />
+                    <Route path="/crops" element={<CropsPage />} />
+                    <Route path="/disease" element={<DiseaseDetectionPage />} />
+                    <Route path="/irrigation" element={<IrrigationPage />} />
+                    <Route path="/weather" element={<IrrigationPage />} />
+                    <Route path="/market" element={<MarketPricesPage />} />
+                    <Route path="/community" element={<CommunityPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </MainLayout>
+              }
+            />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </AppProvider>

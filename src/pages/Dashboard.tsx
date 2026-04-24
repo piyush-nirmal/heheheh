@@ -7,6 +7,8 @@ import { ActionableAdvice } from '@/components/dashboard/ActionableAdvice';
 import { MarketTrends } from '@/components/dashboard/MarketTrends';
 import { CropCalendar } from '@/components/dashboard/CropCalendar';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 
 const NewsItem = ({ title, date }: { title: string; date: string }) => (
   <div className="flex flex-col border-b border-gray-100 py-3 last:border-0 hover:bg-gray-50 transition-colors px-2 rounded">
@@ -19,56 +21,102 @@ const NewsItem = ({ title, date }: { title: string; date: string }) => (
   </div>
 );
 
+const heroSlides = [
+  {
+    img: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=2000&auto=format&fit=crop',
+    badge: 'KEY INITIATIVE',
+    title: 'Digital Agriculture Mission 2024',
+    desc: 'Use advanced drone technology and AI-based advisory for precision farming.',
+    color: 'from-white/95 via-white/50',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2000&auto=format&fit=crop',
+    badge: 'GOVT SCHEME',
+    title: 'PM-KISAN Samman Nidhi',
+    desc: '₹6,000 per year direct income support for all eligible farmer families.',
+    color: 'from-white/95 via-green-50/50',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=2000&auto=format&fit=crop',
+    badge: 'WEATHER ADVISORY',
+    title: 'Precision Weather Farming',
+    desc: 'Get hyperlocal weather forecasts and crop-specific alerts to protect your harvest.',
+    color: 'from-white/95 via-blue-50/50',
+  },
+];
+
 const Dashboard = () => {
   const { state } = useApp();
+  const { t } = useTranslation();
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide(prev => (prev + 1) % heroSlides.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="space-y-8 pb-12 bg-gray-50/50 min-h-screen">
       {/* 1. Scrolling Ticker (Marquee) */}
       <div className="bg-[#1b325f] text-white py-2 overflow-hidden relative flex items-center shadow-md border-b-2 border-orange-500">
         <div className="bg-orange-600 px-5 py-1 text-xs font-bold absolute left-0 z-10 h-full flex items-center uppercase tracking-wider shadow-md">
-          What's New
+          {t('dashboard.whatsNew')}
         </div>
         <div className="animate-marquee whitespace-nowrap pl-40 text-sm font-medium flex gap-12 items-center">
-          <span className="flex items-center gap-2">📢 PM-KISAN 16th Installment released. Check status now!</span>
-          <span className="flex items-center gap-2">🌱 Soil Health Card Scheme renewal deadline extended.</span>
-          <span className="flex items-center gap-2">🚜 New subsidy announced for solar pumps under PM-KUSUM.</span>
-          <span className="flex items-center gap-2">⚠️ Heavy rainfall alert for coastal districts.</span>
-          <span className="flex items-center gap-2">🌾 MSP for Wheat increased by ₹150 for Rabi Season 2024-25.</span>
+          <span className="flex items-center gap-2">📢 {t('dashboard.ticker.pmKisan')}</span>
+          <span className="flex items-center gap-2">🌱 {t('dashboard.ticker.soilHealth')}</span>
+          <span className="flex items-center gap-2">🚜 {t('dashboard.ticker.solar')}</span>
+          <span className="flex items-center gap-2">⚠️ {t('dashboard.ticker.rainfall')}</span>
+          <span className="flex items-center gap-2">🌾 {t('dashboard.ticker.msp')}</span>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 space-y-8">
+      <div className="max-w-screen-2xl mx-auto px-4 md:px-6 xl:px-8 space-y-8">
 
         {/* 2. Top Section: Hero Banner & Leadership */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Hero Slider (9 Cols) */}
-          <div className="lg:col-span-9 relative rounded-xl overflow-hidden shadow-lg group h-[320px]">
-            <img
-              src="https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=2000&auto=format&fit=crop"
-              alt="Digital Agriculture Banner"
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/50 to-transparent flex flex-col justify-end p-8 text-gray-900">
-              <div className="max-w-2xl transform transition-transform duration-500 group-hover:-translate-y-2">
-                <span className="bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-sm mb-3 inline-block shadow-sm">
-                  KEY INITIATIVE
-                </span>
-                <h2 className="text-3xl font-extrabold leading-tight mb-3">
-                  Digital Agriculture Mission 2024
-                </h2>
-                <p className="text-gray-800 text-lg line-clamp-2 font-medium">
-                  Use advanced drone technology and AI-based advisory for precision farming. Empowering farmers with real-time data.
-                </p>
-                <div className="mt-4 flex gap-3">
-                  <Button className="bg-[#1b325f] text-white hover:bg-[#15274a] font-bold border-none">
-                    Read Guidelines
-                  </Button>
-                  <Button variant="outline" className="text-[#1b325f] border-[#1b325f] hover:bg-[#1b325f] hover:text-white">
-                    Apply For Subsidy
-                  </Button>
+          <div className="lg:col-span-9 relative rounded-xl overflow-hidden shadow-lg h-[320px]">
+            {heroSlides.map((slide, idx) => (
+              <div
+                key={idx}
+                className={`absolute inset-0 transition-opacity duration-1000 ${idx === activeSlide ? 'opacity-100' : 'opacity-0'}`}
+              >
+                <img
+                  src={slide.img}
+                  alt={slide.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${slide.color} to-transparent flex flex-col justify-end p-8 text-gray-900`}>
+                  <span className="bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-sm mb-3 inline-block shadow-sm">
+                    {slide.badge}
+                  </span>
+                  <h2 className="text-3xl font-extrabold leading-tight mb-2">{slide.title}</h2>
+                  <p className="text-gray-700 text-base mb-4 max-w-lg">{slide.desc}</p>
+                  <div className="flex gap-3">
+                    <Button className="bg-[#1b325f] text-white hover:bg-[#15274a] font-bold border-none">
+                      {t('dashboard.readGuidelines')}
+                    </Button>
+                    <Button variant="outline" className="text-[#1b325f] border-[#1b325f] hover:bg-[#1b325f] hover:text-white">
+                      {t('dashboard.applySubsidy')}
+                    </Button>
+                  </div>
                 </div>
               </div>
+            ))}
+            {/* Dot indicators */}
+            <div className="absolute bottom-4 right-4 flex gap-2 z-10">
+              {heroSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveSlide(idx)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    idx === activeSlide ? 'bg-orange-500 w-6' : 'bg-white/60 hover:bg-white'
+                  }`}
+                />
+              ))}
             </div>
           </div>
 
@@ -80,7 +128,7 @@ const Dashboard = () => {
                   <img src="/Narendra-Modi.jpeg" alt="PM Modi" className="w-full h-full object-cover shadow-sm" />
                 </div>
                 <h3 className="font-bold text-[#1b325f] text-lg">Shri Narendra Modi</h3>
-                <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mt-1">Hon'ble Prime Minister</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mt-1">{t('dashboard.honblePM')}</p>
               </div>
             </Card>
             <Card className="flex-1 shadow-md border-t-4 border-t-[#1b325f] overflow-hidden bg-white">
@@ -89,7 +137,7 @@ const Dashboard = () => {
                   <img src="/1357404-shivraj.avif" alt="Agriculture Minister" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="font-bold text-[#1b325f] text-base">Shri Shivraj Singh Chouhan</h3>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-1">Hon'ble Agriculture Minister</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mt-1">{t('dashboard.honbleMinister')}</p>
               </div>
             </Card>
           </div>
@@ -99,62 +147,62 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
-              title: "Crop Advisory",
-              hi: "फसल सलाह",
-              desc: "Get AI-powered crop recommendations",
+              title: t('dashboard.services.cropAdvisory'),
+              hi: t('nav.cropAdvisory'),
+              desc: t('dashboard.services.cropAdvisoryDesc'),
               icon: <Sprout className="h-6 w-6 text-white" />,
-              color: "bg-green-600",
-              link: "/crops"
+              color: 'bg-green-600',
+              link: '/crops'
             },
             {
-              title: "Soil Report",
-              hi: "मिट्टी रिपोर्ट",
-              desc: "Analyze your soil health",
+              title: t('dashboard.services.soilReport'),
+              hi: t('nav.soilHealthCard'),
+              desc: t('dashboard.services.soilReportDesc'),
               icon: <img src="/soil-health-logo.png" alt="Soil" className="h-6 w-6" />,
-              color: "bg-brown-600",
-              link: "/soil"
+              color: 'bg-brown-600',
+              link: '/soil'
             },
             {
-              title: "Disease Detection",
-              hi: "रोग पहचान",
-              desc: "AI-powered disease identification",
+              title: t('dashboard.services.diseaseDetection'),
+              hi: t('dashboard.services.diseaseDetection'),
+              desc: t('dashboard.services.diseaseDetectionDesc'),
               icon: <Scan className="h-6 w-6 text-white" />,
-              color: "bg-red-500",
-              link: "/disease"
+              color: 'bg-red-500',
+              link: '/disease'
             },
             {
-              title: "Irrigation Tips",
-              hi: "सिंचाई सुझाव",
-              desc: "Smart watering guidance",
+              title: t('dashboard.services.irrigationTips'),
+              hi: t('dashboard.services.irrigationTips'),
+              desc: t('dashboard.services.irrigationTipsDesc'),
               icon: <Droplets className="h-6 w-6 text-white" />,
-              color: "bg-blue-500",
-              link: "/weather"
+              color: 'bg-blue-500',
+              link: '/weather'
             },
             {
-              title: "Market Prices",
-              hi: "बाज़ार भाव",
-              desc: "Latest mandi rates",
+              title: t('dashboard.services.marketPrices'),
+              hi: t('dashboard.services.marketPrices'),
+              desc: t('dashboard.services.marketPricesDesc'),
               icon: <TrendingUp className="h-6 w-6 text-white" />,
-              color: "bg-amber-500",
-              link: "/market"
+              color: 'bg-amber-500',
+              link: '/market'
             },
             {
-              title: "Community",
-              hi: "समुदाय",
-              desc: "Connect with other farmers",
+              title: t('dashboard.services.community'),
+              hi: t('dashboard.services.community'),
+              desc: t('dashboard.services.communityDesc'),
               icon: <Users className="h-6 w-6 text-white" />,
-              color: "bg-purple-600",
-              link: "/community"
+              color: 'bg-purple-600',
+              link: '/community'
             },
             {
-              title: "Voice Assistant",
-              hi: "आवाज़ सहायक",
-              desc: "Speak in your language",
+              title: t('dashboard.services.voiceAssistant'),
+              hi: t('dashboard.services.voiceAssistant'),
+              desc: t('dashboard.services.voiceAssistantDesc'),
               icon: <Mic className="h-6 w-6 text-white" />,
-              color: "bg-green-500",
-              link: "#",
+              color: 'bg-green-500',
+              link: '/contact',
               isSpecial: true,
-              badge: "NEW"
+              badge: 'NEW'
             },
           ].map((item, idx) => (
             <Link
@@ -175,9 +223,9 @@ const Dashboard = () => {
                   <h3 className="font-bold text-gray-900 text-lg leading-tight">{item.title}</h3>
                   <p className="text-xs font-medium text-gray-500 mb-1">{item.hi}</p>
                   <p className="text-xs text-gray-400 leading-snug">{item.desc}</p>
-                  {item.title === 'Voice Assistant' && (
+                  {item.title === t('dashboard.services.voiceAssistant') && (
                     <div className="flex items-center gap-1 mt-2 text-[10px] text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full w-fit">
-                      <Mic className="h-3 w-3" /> 12+ Languages
+                      <Mic className="h-3 w-3" /> {t('dashboard.services.languages')}
                     </div>
                   )}
                 </div>
@@ -194,20 +242,20 @@ const Dashboard = () => {
             <Card className="shadow-md border-gray-200 overflow-hidden">
               <CardHeader className="py-3 px-4 bg-[#1b325f] text-white flex justify-between items-center">
                 <CardTitle className="text-sm font-bold flex items-center gap-2 tracking-wide">
-                  <Newspaper className="h-4 w-4" /> LATEST NEWS
+                  <Newspaper className="h-4 w-4" /> {t('dashboard.latestNews')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="max-h-[500px] overflow-y-auto custom-scrollbar divide-y divide-gray-100 bg-white">
-                  <NewsItem title="Registration open for PM-KMY pension scheme" date="Jan 31, 2024" />
-                  <NewsItem title="Cabinet approves MSP for Copra for 2024 season" date="Jan 30, 2024" />
-                  <NewsItem title="ICAR develops new heat-resistant wheat variety" date="Jan 28, 2024" />
-                  <NewsItem title="Union Minister inaugurates National Conference" date="Jan 25, 2024" />
-                  <NewsItem title="Export of onions banned till March 31st" date="Jan 22, 2024" />
-                  <NewsItem title="Digital crop survey launched in 10 states" date="Jan 18, 2024" />
+                  <NewsItem title={t('dashboard.news.n1')} date="Jan 31, 2024" />
+                  <NewsItem title={t('dashboard.news.n2')} date="Jan 30, 2024" />
+                  <NewsItem title={t('dashboard.news.n3')} date="Jan 28, 2024" />
+                  <NewsItem title={t('dashboard.news.n4')} date="Jan 25, 2024" />
+                  <NewsItem title={t('dashboard.news.n5')} date="Jan 22, 2024" />
+                  <NewsItem title={t('dashboard.news.n6')} date="Jan 18, 2024" />
                 </div>
                 <div className="p-2 bg-gray-50 text-center border-t">
-                  <Link to="/news" className="text-xs font-bold text-[#1b325f] hover:underline">VIEW ARCHIVE</Link>
+                  <Link to="/contact" className="text-xs font-bold text-[#1b325f] hover:underline">{t('dashboard.viewArchive')}</Link>
                 </div>
               </CardContent>
             </Card>
@@ -224,9 +272,9 @@ const Dashboard = () => {
             <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-blue-50 to-white px-5 py-3 border-b border-gray-100 flex justify-between items-center">
                 <h3 className="font-bold text-[#1b325f] flex items-center gap-2">
-                  <CloudSun className="h-5 w-5 text-blue-600" /> Location Weather
+                  <CloudSun className="h-5 w-5 text-blue-600" /> {t('dashboard.locationWeather')}
                 </h3>
-                <span className="text-[10px] font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">LIVE</span>
+                <span className="text-[10px] font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">{t('dashboard.live')}</span>
               </div>
               <div className="p-5">
                 <WeatherWidget />
@@ -237,7 +285,7 @@ const Dashboard = () => {
             <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
               <div className="bg-gradient-to-r from-orange-50 to-white px-5 py-3 border-b border-orange-100 flex justify-between items-center">
                 <h3 className="font-bold text-[#1b325f] flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-orange-600" /> Agro-Advisory
+                  <AlertTriangle className="h-5 w-5 text-orange-600" /> {t('dashboard.agroAdvisory')}
                 </h3>
               </div>
               <div className="p-1">
@@ -259,10 +307,10 @@ const Dashboard = () => {
                 <FileText className="h-32 w-32" />
               </div>
               <CardContent className="p-6 relative z-10">
-                <h4 className="font-bold text-lg mb-2">Have a Query?</h4>
-                <p className="text-sm opacity-80 mb-4">Chat with our AI assistant or call kisan helpline.</p>
+                <h4 className="font-bold text-lg mb-2">{t('dashboard.haveQuery')}</h4>
+                <p className="text-sm opacity-80 mb-4">{t('dashboard.chatDesc')}</p>
                 <Button variant="secondary" className="w-full text-[#1b325f] font-bold hover:bg-gray-100">
-                  Ask Kisan AI
+                  {t('dashboard.askKisanAI')}
                 </Button>
               </CardContent>
             </Card>

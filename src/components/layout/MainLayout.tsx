@@ -4,6 +4,7 @@ import { BottomNavigation } from './BottomNavigation';
 import { Footer } from './Footer';
 import { KisanAI } from '@/components/chat/KisanAI';
 import { useApp } from '@/contexts/AppContext';
+import { useTranslation } from 'react-i18next';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -11,13 +12,14 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   const { state } = useApp();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       {/* Offline banner */}
       {!state.isOnline && (
         <div className="bg-red-500 text-white text-center text-sm py-1 font-medium z-50">
-          You're offline. Data will sync when connected.
+          {t('common.offlineBanner')}
         </div>
       )}
 
